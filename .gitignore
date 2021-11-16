@@ -1,6 +1,6 @@
 .DS_Store
 
-*.layout
-*.depend
+compile_commands.json
+
 bin/
 obj/
