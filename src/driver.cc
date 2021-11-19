@@ -5,9 +5,9 @@
 
 int main() {
   auto file_system = DataLoader("example_data/example_1.csv").BuildTree();
-  auto textbooks_dir = file_system.GetNode("/Users/devak/Documents/Textbooks");
+  auto textbooks_dir = file_system.GetNode("/Users/devak/Documents");
 
-  for (const auto& child : textbooks_dir->children[0]->children[0]->children[0]->children) {
+  for (const auto& child : textbooks_dir->children) {
     std::cout << (child->node_type == NodeType::File ? "File: " : "Dir: ")
               << child->name
               << " size of "

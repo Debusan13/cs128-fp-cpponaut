@@ -7,7 +7,19 @@ FileSystem::~FileSystem() {
 }
 
 Node* FileSystem::GetNode(const std::filesystem::path& path) const {
-  path.filename(); // to temporary silence warnings
-  // TODO
-  return root_;
+  auto curr = root_;
+  for (auto it = ++path.begin(); it != path.end(); ++it) {
+    Node* next = nullptr;
+    for (const auto& child : curr->children) {
+      if (child->name == *it) {
+        next = child;
+        break;
+      }
+      if (!next) {
+        throw std::runtime_error("Path not found");
+      }
+    }
+    curr = next;
+  }
+  return curr;
 }
