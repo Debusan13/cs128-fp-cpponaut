@@ -10,7 +10,7 @@ public:
   /*
    * Recieve ownership of the tree
    */
-  FileSystem(Node root);
+  FileSystem(Node* root);
 
   FileSystem(const FileSystem& rhs) = delete;
   FileSystem operator=(const FileSystem& rhs) = delete;
@@ -23,7 +23,7 @@ public:
   /* 
    * Return the node with given path
    */
-  Node GetNode(std::filesystem::path path);
+  Node* GetNode(const std::filesystem::path& path) const;
 
 private:
   Node* root_;

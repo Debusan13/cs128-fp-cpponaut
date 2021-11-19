@@ -10,23 +10,21 @@ enum NodeType {
 };
 
 struct Node {
-  // path of the file
-  std::filesystem::path path;
+  // name of the file or directory
+  std::filesystem::path name;
   // The sole size of the file or folder without considering its children
   unsigned long size;
   // The size of subtree from this node
   unsigned long inherit_size;
   // The contents of the folder. Empty vector if node is file
-  std::vector<Node> children;
+  std::vector<Node*> children;
   // The type of the node (file or directory). Necessary because directory 
   // could be empty, therfore the type of node cannot be inferred from 
   // whether children is empty.
   NodeType node_type;
 
-  /* 
-   * The name of the file or directory
-   */
-  std::filesystem::path Name() const { return path.filename(); }
+  Node(const std::filesystem::path& name, unsigned long size, NodeType node_type)
+    : name{name}, size{size}, node_type{node_type} {};
 };
 
 #endif
