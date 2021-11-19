@@ -1,6 +1,9 @@
-.DS_Store
-
-compile_commands.json
-
 bin/
 obj/
+
+# nvim COC config files
+compile_commands.json
+.cache
+
+# misc
+.DS_Store
