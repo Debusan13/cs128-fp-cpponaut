@@ -1,13 +1,12 @@
 CXX=clang++
-INCLUDES=-Iincludes/ -Ilib/
-CXXEXTRAS=-Wall -Wextra -Werror -pedantic
-CXXFLAGS=-std=c++20 -g -fstandalone-debug
+INCLUDES=-Iincludes/
+CXXFLAGS=-std=c++20 -fstandalone-debug -Wall -Wextra -pedantic 
 
 exec: bin/exec
 tests: bin/tests
 
 bin/exec: ./src/*.cc
-	$(CXX) $(CXXFLAGS) $(CXXEXTRAS) $(INCLUDES) $^ -o $@
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $^ -o $@
 
 bin/tests: ./tests/tests.cc obj/catch.o $(filter-out, ./src/*.cc)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) $^ -o $@
