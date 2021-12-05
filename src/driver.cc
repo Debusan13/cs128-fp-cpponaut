@@ -1,5 +1,9 @@
 #include <iostream>
 
+#include <termox/termox.hpp>
+
+using namespace ox;
+
 #include "DataLoader.hpp"
 #include "Node.hpp"
 
