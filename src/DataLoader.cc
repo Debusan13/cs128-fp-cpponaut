@@ -1,10 +1,7 @@
-#include <iostream>
-#include <sstream>
-#include <fstream>
-
 #include "DataLoader.hpp"
 
-std::string StrReplace(std::string str, const std::string& from, 
+std::string StrReplace(std::string str,
+                       const std::string& from,
                        const std::string& to) {
   size_t idx = 0;
   while ((idx = str.find(from, idx)) != std::string::npos) {
@@ -22,26 +19,27 @@ FileSystem DataLoader::BuildTree() {
   }
 
   // construct tree
-  Node* root_ = new Node("/", 0, NodeType::Directory);
+  auto root_ = std::make_unique<Node>("/", 0, NodeType::Directory);
 
   for (const auto& entry : entries) {
     auto path = entry.path;
 
-    auto curr = root_;
+    Node* curr = root_.get();
     for (auto dir = ++path.begin(); dir != path.end(); ++dir) {
       Node* next = nullptr;
       for (const auto& child : curr->children) {
         if (child->name == *dir) {
-          next = child;
+          next = child.get();
           break;
         }
       }
+
       if (!next) {
         auto size = dir == --path.end() ? entry.size : 0;
-        auto node_type = 
-          dir == --path.end() ? NodeType::File : NodeType::Directory;
-        next = new Node(*dir, size, node_type);
-        curr->children.push_back(next);
+        auto node_type =
+            (dir == --path.end()) ? NodeType::File : NodeType::Directory;
+        auto new_node = std::make_unique<Node>(*dir, size, node_type);
+        curr->children.push_back(std::move(new_node));
       }
 
       curr = next;
@@ -49,8 +47,8 @@ FileSystem DataLoader::BuildTree() {
   }
 
   // calculate inherit_size and sort children by it
-  InheritSizeOf(root_);
-  SortChildren(root_);
+  InheritSizeOf(root_.get()); 
+  SortChildren(root_.get());
 
   return FileSystem(root_);
 }
@@ -78,24 +76,24 @@ std::vector<FileEntry> DataLoader::LoadEntries() {
 
     entries.push_back(entry);
   }
-  
+
   return entries;
 }
 
 unsigned long DataLoader::InheritSizeOf(Node* node) {
   auto size = node->size;
   for (const auto& child : node->children) {
-    size += InheritSizeOf(child);
+    size += InheritSizeOf(child.get());
   }
   node->inherit_size = size;
   return size;
 }
 
 void DataLoader::SortChildren(Node* node) {
-  std::sort(node->children.begin(), node->children.end(), 
-            [](Node* a, Node* b) { return a->inherit_size > b->inherit_size; });
+  std::sort(node->children.begin(), node->children.end(), [](const std::unique_ptr<Node>& a, const std::unique_ptr<Node>& b) {
+    return a->inherit_size > b->inherit_size;
+  });
   for (const auto& child : node->children) {
-    SortChildren(child);
+    SortChildren(child.get());
   }
 }
-

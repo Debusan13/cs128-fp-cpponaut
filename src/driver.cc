@@ -9,9 +9,7 @@ int main() {
 
   for (const auto& child : textbooks_dir->children) {
     std::cout << (child->node_type == NodeType::File ? "File: " : "Dir: ")
-              << child->name
-              << " size of "
-              << child->inherit_size << std::endl;
+              << child->name << " size of " << child->inherit_size << std::endl;
   }
 
   return 0;
