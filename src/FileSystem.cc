@@ -1,18 +1,18 @@
 #include "FileSystem.hpp"
 
-FileSystem::FileSystem(Node* root) : root_{root} {};
+FileSystem::FileSystem(std::unique_ptr<Node>& root): root_{std::move(root)} {};
 
-FileSystem::~FileSystem() {
-  // TODO: free memory
-}
+// ~FileSystem() {
+
+// }
 
 Node* FileSystem::GetNode(const std::filesystem::path& path) const {
-  auto curr = root_;
+  auto curr = root_.get();
   for (auto it = ++path.begin(); it != path.end(); ++it) {
     Node* next = nullptr;
     for (const auto& child : curr->children) {
       if (child->name == *it) {
-        next = child;
+        next = child.get();
         break;
       }
       if (!next) {

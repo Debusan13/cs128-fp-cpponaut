@@ -3,6 +3,12 @@
 
 #include <vector>
 #include <filesystem>
+#include <memory>
+
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <algorithm>
 
 #include "FileSystem.hpp"
 

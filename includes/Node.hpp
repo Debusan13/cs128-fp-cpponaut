@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <filesystem>
+#include <memory>
 
 enum NodeType {
   File,
@@ -17,7 +18,7 @@ struct Node {
   // The size of subtree from this node
   unsigned long inherit_size;
   // The contents of the folder. Empty vector if node is file
-  std::vector<Node*> children;
+  std::vector<std::unique_ptr<Node>> children;
   // The type of the node (file or directory). Necessary because directory 
   // could be empty, therfore the type of node cannot be inferred from 
   // whether children is empty.
