@@ -36,9 +36,9 @@ FileSystem DataLoader::BuildTree() {
 
       if (!next) {
         auto size = dir == --path.end() ? entry.size : 0;
-        auto node_type =
-            (dir == --path.end()) ? NodeType::File : NodeType::Directory;
+        auto node_type = dir == --path.end() ? NodeType::File : NodeType::Directory;
         auto new_node = std::make_unique<Node>(*dir, size, node_type);
+        next = new_node.get();
         curr->children.push_back(std::move(new_node));
       }
 
