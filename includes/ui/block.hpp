@@ -14,12 +14,28 @@
 
 using namespace esc;
 
+std::string SizeToHum(unsigned long size) {
+  std::string suffix[5] = {"B", "KB", "MB", "GB"};
+
+  int i = 0;
+
+  constexpr unsigned long block_size = 1024;
+  
+  if (size > block_size) {
+    for (i = 0; (size / block_size) > 0 && i<3; i++)
+      size /= block_size;
+  }
+
+  return (std::to_string(size) + " " + suffix[i]);
+}
+
 class Block : public ox::Text_view {
   public:
     Block(Node* node) : ox::Text_view{U""}, node_{node} { 
+      std::string human_readable_size = SizeToHum(node_->inherit_size);
       auto str = node->name.generic_string() 
               + " " 
-              + std::to_string(node->inherit_size);
+              + human_readable_size;
       this->set_text(ox::Glyph_string(str));
 
       // if (node->node_type == NodeType::Directory) {
@@ -29,7 +45,8 @@ class Block : public ox::Text_view {
       // }
 
       auto parent = FileSystem::GetInstance().GetNode(node->name.parent_path());
-      int width = ((double) (node->inherit_size / parent->inherit_size)) * Terminal::width();
+      auto term_w = Terminal::area().width;
+      int width = ((double) (node->inherit_size / parent->inherit_size)) * term_w;
       using namespace ox::pipe;
       *this | ox::bg((node->node_type == NodeType::Directory) ? unfocus_color_dir_ : unfocus_color_file_) | strong_focus() | fixed_height(1) | preferred_width(width);
     }
