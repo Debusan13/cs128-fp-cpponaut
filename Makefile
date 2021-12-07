@@ -8,7 +8,7 @@ tests: bin/tests
 bin/exec: ./src/*.cc
 	$(CXX) $(CXXFLAGS) $(INCLUDES) $^ -o $@
 
-bin/tests: ./tests/tests.cc obj/catch.o $(filter-out, ./src/*.cc)
+bin/tests: ./tests/tests.cc obj/catch.o ./src/DataLoader.cc ./src/FileSystem.cc
 	$(CXX) $(CXXFLAGS) $(INCLUDES) $^ -o $@
 
 obj/catch.o: tests/catch.cc
