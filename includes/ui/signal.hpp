@@ -13,7 +13,8 @@ private:
   std::filesystem::path path_;
 
   Dispatcher() {
-    location_change.connect([this](auto path) {
+    path_ = "/";
+    location_change.connect([&](auto path) {
           path_ = path;
         });
   }

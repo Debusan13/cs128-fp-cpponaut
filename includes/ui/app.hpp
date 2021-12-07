@@ -4,6 +4,7 @@
 #include <termox/termox.hpp>
 
 #include "FileSystem.hpp"
+#include "termox/widget/align.hpp"
 #include "ui/signal.hpp"
 #include "ui/block.hpp"
 
@@ -15,17 +16,19 @@ struct DisplayPanel : layout::Vertical<> {
     SetContent(str);
     
     // update content when location chnages
-    location_change.connect([this](auto str) {
+    location_change.connect([&](auto str) {
         SetContent(str);
       });
   }
 
   void SetContent(const std::filesystem::path& str) {
-    auto node = FileSystem::GetInstance().GetNode(str);
     this->delete_all_children();
+    auto node = FileSystem::GetInstance().GetNode(str);
     for (const auto& child : node->children) {
-      this->append_child(std::make_unique<Block>(Glyph_string(child->name)));
+      this->append_child(std::make_unique<Block>(child.get()));
     }
+    System::set_focus(*this->children_.front().get());
+    this->children_.back() | expanding_height(1);
   }
 };
 
@@ -33,7 +36,7 @@ class PathLabel : public Textbox {
   public:
     PathLabel(const std::filesystem::path& str) : Textbox(ox::Glyph_string(str)) {
       // update label text when location changes
-      location_change.connect([this](auto str) {
+      location_change.connect([&](auto str) {
         this->set_text(Glyph_string(str));
       });
 
