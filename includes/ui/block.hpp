@@ -7,6 +7,7 @@
 #include <termox/termox.hpp>
 
 #include "Node.hpp"
+#include "FileSystem.hpp"
 #include "termox/system/system.hpp"
 #include "termox/system/detail/focus.hpp"
 #include "ui/signal.hpp"
@@ -21,14 +22,16 @@ class Block : public ox::Text_view {
               + std::to_string(node->inherit_size);
       this->set_text(ox::Glyph_string(str));
 
-      if (node->node_type == NodeType::Directory) {
-        this->mouse_pressed.connect([&](auto) {
-              Dispatcher::GetInstance().GoDown(node_->name);
-            });
-      }
+      // if (node->node_type == NodeType::Directory) {
+      //   this->mouse_pressed.connect([&](auto) {
+      //         Dispatcher::GetInstance().GoDown(node_->name);
+      //       });
+      // }
 
+      auto parent = FileSystem::GetInstance().GetNode(node->name.parent_path());
+      int width = ((double) (node->inherit_size / parent->inherit_size)) * Terminal::width();
       using namespace ox::pipe;
-      *this | ox::bg(unfocus_color_) | strong_focus() | fixed_height(1);
+      *this | ox::bg((node->node_type == NodeType::Directory) ? unfocus_color_dir_ : unfocus_color_file_) | strong_focus() | fixed_height(1) | preferred_width(width);
     }
 
    protected:
@@ -44,8 +47,6 @@ class Block : public ox::Text_view {
         case Key::Escape:
           Dispatcher::GetInstance().GoUp();
           break;
-        case Key::q:
-          ox::System::quit();
         case Key::j:
         case Key::Arrow_down:
           ox::detail::Focus::tab_press();
@@ -54,9 +55,18 @@ class Block : public ox::Text_view {
         case Key::Arrow_up:
           ox::detail::Focus::shift_tab_press();
           break;
+        case Key::q:
+          ox::System::quit();
         default: ;
       };
       return Widget::key_press_event(key);
+    }
+
+    auto mouse_press_event(Mouse const& m) -> bool override 
+    {
+      if (node_->node_type == NodeType::Directory)
+        Dispatcher::GetInstance().GoDown(node_->name);
+      return Widget::mouse_press_event(m);
     }
 
     auto focus_in_event() -> bool override
@@ -67,14 +77,15 @@ class Block : public ox::Text_view {
 
     auto focus_out_event() -> bool override
     {
-        *this | ox::bg(unfocus_color_);
+        *this | ox::bg((node_->node_type == NodeType::Directory) ? unfocus_color_dir_ : unfocus_color_file_);
         return Widget::focus_out_event();
     } 
 
   private:
     Node* node_;
     constexpr static auto focus_color_   = ox::macintosh_ii::Silver;
-    constexpr static auto unfocus_color_ = ox::macintosh_ii::Dark_gray;
+    constexpr static auto unfocus_color_dir_  = ox::macintosh_ii::Gray;
+    constexpr static auto unfocus_color_file_ = ox::macintosh_ii::Dark_gray;
 };
 
 #endif

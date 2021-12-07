@@ -24,12 +24,11 @@ struct DisplayPanel : layout::Vertical<> {
   void SetContent(const std::filesystem::path& str) {
     this->delete_all_children();
     auto node = FileSystem::GetInstance().GetNode(str);
-    for (const auto& child : node->children) {
+    for (const auto& child : node->children)
       this->append_child(std::make_unique<Block>(child.get()));
-    }
-    this->append_child(std::make_unique<Text_view>(U"")) | bg(macintosh_ii::Dark_gray);
-    System::set_focus(*this->children_.front().get());
-    this->children_.back() | expanding_height(1);
+    this->append_child(std::make_unique<Text_view>()) | bg(macintosh_ii::Dark_gray) | no_focus() | expanding_height(1);
+    System::clear_focus();
+    System::set_focus(*this->children_.at(0).get());
   }
 };
 
