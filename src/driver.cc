@@ -16,5 +16,5 @@ int main() {
               << child->name << " size of " << child->inherit_size << std::endl;
   }
 
-  return 0;
+  return ox::System{}.run<ox::Textbox>("Hello, World!");
 }
