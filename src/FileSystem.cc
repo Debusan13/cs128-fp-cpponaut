@@ -1,6 +1,6 @@
 #include "FileSystem.hpp"
 
-FileSystem::FileSystem(DataLoader* const loader) {
+FileSystem::FileSystem(DataLoaderBase* const loader) {
   if (loader) {
     root_ = loader->BuildTree();
   } else {
@@ -24,4 +24,9 @@ Node* FileSystem::GetNode(const std::filesystem::path& path) const {
     curr = next;
   }
   return curr;
+}
+
+FileSystem& FileSystem::getInstanceImpl(DataLoaderBase* const loader) {
+  static FileSystem instance{ loader };
+  return instance;
 }

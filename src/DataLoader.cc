@@ -1,18 +1,6 @@
 #include "DataLoader.hpp"
 
-std::string StrReplace(std::string str,
-                       const std::string& from,
-                       const std::string& to) {
-  size_t idx = 0;
-  while ((idx = str.find(from, idx)) != std::string::npos) {
-    str.replace(idx, from.length(), to);
-    idx += to.length();
-  }
-
-  return str;
-}
-
-std::unique_ptr<Node> DataLoader::BuildTree() {
+std::unique_ptr<Node> DataLoader::BuildTree() const {
   auto entries = LoadEntries();
   if (entries.empty()) {
     throw std::runtime_error("Empty entries");
@@ -53,7 +41,7 @@ std::unique_ptr<Node> DataLoader::BuildTree() {
   return root_;
 }
 
-std::vector<FileEntry> DataLoader::LoadEntries() {
+std::vector<FileEntry> DataLoader::LoadEntries() const {
   std::ifstream file(path_);
   if (!file.is_open()) {
     throw std::runtime_error("Failed to open file");
@@ -80,7 +68,7 @@ std::vector<FileEntry> DataLoader::LoadEntries() {
   return entries;
 }
 
-unsigned long DataLoader::InheritSizeOf(Node* node) {
+unsigned long DataLoader::InheritSizeOf(Node* node) const {
   auto size = node->size;
   for (const auto& child : node->children) {
     size += InheritSizeOf(child.get());
@@ -89,7 +77,7 @@ unsigned long DataLoader::InheritSizeOf(Node* node) {
   return size;
 }
 
-void DataLoader::SortChildren(Node* node) {
+void DataLoader::SortChildren(Node* node) const {
   std::sort(node->children.begin(), node->children.end(), [](const std::unique_ptr<Node>& a, const std::unique_ptr<Node>& b) {
     return a->inherit_size > b->inherit_size;
   });

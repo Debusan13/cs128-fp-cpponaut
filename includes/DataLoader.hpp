@@ -17,7 +17,12 @@ struct FileEntry {
   unsigned long size;
 };
 
-class DataLoader {
+class DataLoaderBase {
+public:
+  virtual std::unique_ptr<Node> BuildTree() const = 0;
+};
+
+class DataLoader : public DataLoaderBase {
 public:
   DataLoader(std::filesystem::path path) : path_{path} {};
   /*
@@ -32,7 +37,7 @@ public:
    *
    * Note: call LoadEntries method from here
    */
-  std::unique_ptr<Node> BuildTree();
+  std::unique_ptr<Node> BuildTree() const override;
 
 private:
   std::filesystem::path path_;
@@ -40,9 +45,9 @@ private:
   /*
    * Load all file entries within the CSV file
    */
-  std::vector<FileEntry> LoadEntries();
-  unsigned long InheritSizeOf(Node* node);
-  void SortChildren(Node* node);
+  std::vector<FileEntry> LoadEntries() const;
+  unsigned long InheritSizeOf(Node* node) const;
+  void SortChildren(Node* node) const;
 };
 
 #endif

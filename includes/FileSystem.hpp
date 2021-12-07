@@ -12,12 +12,9 @@
 /* Singleton class that stores the filesystem object */
 class FileSystem {
 private:
-  FileSystem(DataLoader* const loader = nullptr);
+  FileSystem(DataLoaderBase* const loader = nullptr);
 
-  static FileSystem& getInstanceImpl(DataLoader* const loader = nullptr) {
-    static FileSystem instance{ loader };
-    return instance;
-  }
+  static FileSystem& getInstanceImpl(DataLoaderBase* const loader = nullptr);
 
 public:
   /*
@@ -27,7 +24,7 @@ public:
     return getInstanceImpl();
   }
 
-  static FileSystem& Init(DataLoader& loader) {
+  static FileSystem& Init(DataLoaderBase& loader) {
     return getInstanceImpl(&loader);
   }
 
