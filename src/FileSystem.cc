@@ -17,9 +17,9 @@ Node* FileSystem::GetNode(const std::filesystem::path& path) const {
         next = child.get();
         break;
       }
-      if (!next) {
-        throw std::runtime_error("Path not found");
-      }
+    }
+    if (!next) {
+      throw std::runtime_error("Path not found");
     }
     curr = next;
   }
