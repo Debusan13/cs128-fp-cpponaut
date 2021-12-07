@@ -20,9 +20,18 @@ make
 cd ..
 ./run.sh
 ```
+
+## Generating test data
+
+To generate test data on from any directory simply run the following command
+```bash
+find . -type f -exec du -a {} + | sort | sed 's?\.?'`pwd`'?' | tr "," "/," | tr "\t" "," > example.csv
+```
+This will print two columns in the csv file, the first is *file size* and the second is *path name* starting from where the command was run.
+
 ## Troubleshooting
 
-# Locale Error
+### Locale Error
 If you are using the cs128env on docker,
 you might run into following message while building the program.
 
