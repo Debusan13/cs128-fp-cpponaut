@@ -39,6 +39,7 @@ class Block : public ox::Text_view {
           if (node_->node_type == NodeType::Directory)
             Dispatcher::GetInstance().GoDown(node_->name);
           break;
+        case Key::u:
         case Key::Backspace:
         case Key::Escape:
           Dispatcher::GetInstance().GoUp();
@@ -49,7 +50,7 @@ class Block : public ox::Text_view {
         case Key::Arrow_down:
           ox::detail::Focus::tab_press();
           break;
-        case Key::K:
+        case Key::k:
         case Key::Arrow_up:
           ox::detail::Focus::shift_tab_press();
           break;
