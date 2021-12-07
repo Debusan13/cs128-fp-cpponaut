@@ -17,8 +17,8 @@ class Block : public ox::Text_view {
   public:
     Block(Node* node) : ox::Text_view{U""}, node_{node} { 
       auto str = node->name.generic_string() 
-               + " " 
-               + std::to_string(node->inherit_size);
+              + " " 
+              + std::to_string(node->inherit_size);
       this->set_text(ox::Glyph_string(str));
 
       if (node->node_type == NodeType::Directory) {
@@ -73,8 +73,8 @@ class Block : public ox::Text_view {
 
   private:
     Node* node_;
-    constexpr static auto focus_color_   = ox::Color::Red;
-    constexpr static auto unfocus_color_ = ox::Color::Blue;
+    constexpr static auto focus_color_   = ox::macintosh_ii::Silver;
+    constexpr static auto unfocus_color_ = ox::macintosh_ii::Dark_gray;
 };
 
 #endif

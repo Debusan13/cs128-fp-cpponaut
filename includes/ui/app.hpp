@@ -27,6 +27,7 @@ struct DisplayPanel : layout::Vertical<> {
     for (const auto& child : node->children) {
       this->append_child(std::make_unique<Block>(child.get()));
     }
+    this->append_child(std::make_unique<Text_view>(U"")) | bg(macintosh_ii::Dark_gray);
     System::set_focus(*this->children_.front().get());
     this->children_.back() | expanding_height(1);
   }
@@ -40,7 +41,7 @@ class PathLabel : public Textbox {
         this->set_text(Glyph_string(str));
       });
 
-      *this | no_focus() | fixed_height(1);
+      *this | no_focus() | fixed_height(1) | bg(ox::macintosh_ii::Dark_gray);
     }
 };
 
