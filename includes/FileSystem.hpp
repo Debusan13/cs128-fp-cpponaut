@@ -6,24 +6,30 @@
 #include <stdexcept>
 #include <memory>
 
+#include "DataLoader.hpp"
 #include "Node.hpp"
 
 /* Singleton class that stores the filesystem object */
 class FileSystem {
+private:
+  FileSystem(DataLoader* const loader = nullptr);
+
+  static FileSystem& getInstanceImpl(DataLoader* const loader = nullptr) {
+    static FileSystem instance{ loader };
+    return instance;
+  }
+
 public:
   /*
    * Singleton GetInstance mehtod
    */
   static FileSystem& GetInstance() {
-    if (FileSystem::instance_)
-      return *FileSystem::instance_;
-    throw std::runtime_error("Instance does not exist");
+    return getInstanceImpl();
   }
 
-  /*
-   * Recieve ownership of the tree
-   */
-  FileSystem(std::unique_ptr<Node>& root);
+  static FileSystem& Init(DataLoader& loader) {
+    return getInstanceImpl(&loader);
+  }
 
   FileSystem(const FileSystem& rhs) = delete;
   FileSystem operator=(const FileSystem& rhs) = delete;
@@ -34,7 +40,6 @@ public:
   Node* GetNode(const std::filesystem::path& path) const;
 
 private:
-  static FileSystem* instance_;
   std::unique_ptr<Node> root_;
 };
 

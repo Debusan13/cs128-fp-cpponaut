@@ -10,7 +10,7 @@
 #include <fstream>
 #include <algorithm>
 
-#include "FileSystem.hpp"
+#include "Node.hpp"
 
 struct FileEntry {
   std::filesystem::path path;
@@ -32,7 +32,7 @@ public:
    *
    * Note: call LoadEntries method from here
    */
-  FileSystem BuildTree();
+  std::unique_ptr<Node> BuildTree();
 
 private:
   std::filesystem::path path_;

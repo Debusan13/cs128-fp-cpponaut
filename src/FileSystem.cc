@@ -1,10 +1,12 @@
 #include "FileSystem.hpp"
 
-FileSystem::FileSystem(std::unique_ptr<Node>& root): root_{std::move(root)} { };
-
-// ~FileSystem() {
-
-// }
+FileSystem::FileSystem(DataLoader* const loader) {
+  if (loader) {
+    root_ = loader->BuildTree();
+  } else {
+    root_ = std::make_unique<Node>("/", 0, NodeType::Directory);
+  }
+}
 
 Node* FileSystem::GetNode(const std::filesystem::path& path) const {
   auto curr = root_.get();

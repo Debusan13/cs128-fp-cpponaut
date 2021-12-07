@@ -12,7 +12,7 @@ std::string StrReplace(std::string str,
   return str;
 }
 
-FileSystem DataLoader::BuildTree() {
+std::unique_ptr<Node> DataLoader::BuildTree() {
   auto entries = LoadEntries();
   if (entries.empty()) {
     throw std::runtime_error("Empty entries");
@@ -50,7 +50,7 @@ FileSystem DataLoader::BuildTree() {
   InheritSizeOf(root_.get()); 
   SortChildren(root_.get());
 
-  return FileSystem(root_);
+  return root_;
 }
 
 std::vector<FileEntry> DataLoader::LoadEntries() {
