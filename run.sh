@@ -1,3 +1,3 @@
 #!/bin/bash
 
-cmake build && make build && build/src/blocks
+cd build && cmake .. && make && cd .. && build/src/blocks
