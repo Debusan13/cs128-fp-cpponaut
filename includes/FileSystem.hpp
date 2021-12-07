@@ -24,6 +24,9 @@ public:
     return getInstanceImpl();
   }
 
+  /*
+   * Initialize the instance given the DataLoading strategy
+   */
   static FileSystem& Init(DataLoaderBase& loader) {
     return getInstanceImpl(&loader);
   }

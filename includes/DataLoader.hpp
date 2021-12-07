@@ -46,7 +46,15 @@ private:
    * Load all file entries within the CSV file
    */
   std::vector<FileEntry> LoadEntries() const;
+
+  /* 
+   * Recursive helper method for calculating folder size
+   */
   unsigned long InheritSizeOf(Node* node) const;
+
+  /* 
+   * Recursive helper method to sort child nodes by InheritSize in DSC order
+   */
   void SortChildren(Node* node) const;
 };
 
