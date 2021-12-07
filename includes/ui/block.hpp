@@ -15,7 +15,7 @@
 using namespace esc;
 
 std::string SizeToHum(unsigned long size) {
-  std::string suffix[5] = {"B", "KB", "MB", "GB"};
+  std::string suffix[3] = {"KB", "MB", "GB"};
 
   int i = 0;
 
