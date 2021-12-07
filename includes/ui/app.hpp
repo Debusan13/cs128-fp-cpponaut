@@ -15,9 +15,8 @@ struct DisplayPanel : layout::Vertical<> {
     SetContent(str);
     
     // update content when location chnages
-    location_change.connect([](auto str) {
-        str.generic_string();
-        // SetContent(str);
+    location_change.connect([this](auto str) {
+        SetContent(str);
       });
   }
 
@@ -38,7 +37,7 @@ class PathLabel : public Textbox {
         this->set_text(Glyph_string(str));
       });
 
-      *this | no_focus();
+      *this | no_focus() | fixed_height(1);
     }
 };
 

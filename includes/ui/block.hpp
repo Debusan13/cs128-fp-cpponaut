@@ -7,8 +7,6 @@
 
 #include "ui/signal.hpp"
 
-using namespace ox;
-
 class Block : public ox::Button {
   public:
     Block(ox::Glyph_string filename) : ox::Button{std::move(filename)} { 
@@ -20,6 +18,10 @@ class Block : public ox::Button {
       //     *this | ox::bg(unfocus_color_);
       //   }
       // });
+
+      this->pressed.connect([this]() {
+            Dispatcher::GetInstance().GoDown(this->text().str());
+          });
 
       *this | ox::bg(unfocus_color_);
     }
