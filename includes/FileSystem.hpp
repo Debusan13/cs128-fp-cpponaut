@@ -21,9 +21,19 @@ public:
   }
 
   /*
+  * Singleton GetInstance constructor method
+  */
+  static FileSystem& GetInstance(std::unique_ptr<Node>& root) {
+    static FileSystem f(root);
+    instance_ = &f;
+    return f;
+  }
+  
+
+  /*
    * Recieve ownership of the tree
    */
-  FileSystem(std::unique_ptr<Node>& root);
+  FileSystem(std::unique_ptr<Node>& root): root_{std::move(root)} { };
 
   FileSystem(const FileSystem& rhs) = delete;
   FileSystem operator=(const FileSystem& rhs) = delete;

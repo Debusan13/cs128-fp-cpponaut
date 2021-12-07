@@ -1,7 +1,5 @@
 #include "FileSystem.hpp"
 
-FileSystem::FileSystem(std::unique_ptr<Node>& root): root_{std::move(root)} { };
-
 // ~FileSystem() {
 
 // }

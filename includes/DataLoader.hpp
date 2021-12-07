@@ -32,7 +32,7 @@ public:
    *
    * Note: call LoadEntries method from here
    */
-  FileSystem BuildTree();
+  FileSystem& BuildTree();
 
 private:
   std::filesystem::path path_;

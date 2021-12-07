@@ -8,7 +8,7 @@ using namespace ox;
 #include "Node.hpp"
 
 int main() {
-  auto file_system = DataLoader("example_data/example_1.csv").BuildTree();
+  DataLoader("example_data/example_1.csv").BuildTree();
   auto textbooks_dir = FileSystem::GetInstance().GetNode("/Users/devak/Documents");
 
   for (const auto& child : textbooks_dir->children) {
